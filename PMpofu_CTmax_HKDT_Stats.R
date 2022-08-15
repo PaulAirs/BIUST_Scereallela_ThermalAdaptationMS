@@ -97,6 +97,22 @@ Ramp0.06 <- subset(CTmaxTable, Ramping == 0.06)
 Ramp0.25 <- subset(CTmaxTable, Ramping == 0.25) 
 Ramp0.5 <- subset(CTmaxTable, Ramping == 0.5) 
 
+#RAMPING 0.06 Wilcoxon
+pwc <- Ramp0.06 %>%
+  wilcox_test(CTmax ~ Treatment, paired = TRUE, p.adjust.method = "bonferroni")
+WilcoxonScores <- pwc
+write.csv(WilcoxonScores, "Ramp0.06Wilcoxonscores.csv")
+#RAMPING 0.25 Wilcoxon
+pwc <- Ramp0.25 %>%
+  wilcox_test(CTmax ~ Treatment, paired = TRUE, p.adjust.method = "bonferroni")
+WilcoxonScores <- pwc
+write.csv(WilcoxonScores, "Ramp0.25Wilcoxonscores.csv")
+#RAMPING 0.5 Wilcoxon
+pwc <- Ramp0.5 %>%
+  wilcox_test(CTmax ~ Treatment, paired = TRUE, p.adjust.method = "bonferroni")
+WilcoxonScores <- pwc
+write.csv(WilcoxonScores, "Ramp0.5Wilcoxonscores.csv")
+
 # To find multiple comparison letter groupings FOR 0.06 RAMPING ONLY
 CTmax <- Ramp0.06$CTmax
 Treatment_Ramping <- Ramp0.06$Treatment_Ramping
