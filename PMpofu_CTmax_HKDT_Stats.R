@@ -56,24 +56,25 @@ p + geom_boxplot() + theme_bw()
 #Import .csv and call 'HKDTTable'
 
 # Set your data to a factor
+HKDTTable$Temperature <- as.numeric()
 HKDTTable$Treatment <- factor(HKDTTable$Treatment, levels = c("Control",
                                                               "AcuteTRT18",
                                                               "AcuteTRT22",
                                                               "ChronicTRT18",
                                                               "ChronicTRT22",
-                                                              "variable",
+                                                              "Variable",
                                                               "Dessication"))
 
 #To look at individual group comparison statistics with Wilcoxon
 pwc <- HKDTTable %>%
-  wilcox_test(CTmax ~ Treatment, paired = TRUE, p.adjust.method = "bonferroni")
+  wilcox_test(HKDT ~ Treatment, paired = TRUE, p.adjust.method = "bonferroni")
 WilcoxonScores <- pwc
 write.csv(WilcoxonScores, "Wilcoxonscores.csv")
 
 # To find multiple comparison letter groupings
 HKDT <- HKDTTable$HKDT
 HKDT_Treatment <- HKDTTable$Treatment
-Table = suppressWarnings(pairwise.wilcox.test(HKDT_Treatment, Treatment))
+Table = suppressWarnings(pairwise.wilcox.test(HKDT, HKDT_Treatment))
 Table2 = Table$p.value
 Table2
 Table3 = fullPTable(Table2)
@@ -83,42 +84,3 @@ multcompLetters(Table3)
 # Box plot with everything together
 p <- ggplot(HKDTTable, aes(x=Treatment, y=HKDT))
 p + geom_boxplot() + theme_bw()
-
-
-
-################################ RAMPING RATE STATISTICS
-
-# Subset data by RAMPING rates
-Precious0.06 <- subset(Precious, Ramping == 0.06) 
-Precious0.25 <- subset(Precious, Ramping == 0.25) 
-Precious0.5 <- subset(Precious, Ramping == 0.5) 
-
-# To find multiple comparison letter groupings FOR 0.06 RAMPING ONLY
-CTmax <- Precious0.06$CTmax
-Treatment_Ramping <- Precious0.06$Treatment_Ramping
-Table = suppressWarnings(pairwise.wilcox.test(CTmax, Treatment_Ramping))
-Table2 = Table$p.value
-Table2
-Table3 = fullPTable(Table2)
-Table3
-multcompLetters(Table3)
-
-# To find multiple comparison letter groupings FOR 0.06 RAMPING ONLY
-CTmax <- Precious0.25$CTmax
-Treatment_Ramping <- Precious0.25$Treatment_Ramping
-Table = suppressWarnings(pairwise.wilcox.test(CTmax, Treatment_Ramping))
-Table2 = Table$p.value
-Table2
-Table3 = fullPTable(Table2)
-Table3
-multcompLetters(Table3)
-
-# To find multiple comparison letter groupings FOR 0.5 RAMPING ONLY
-CTmax <- Precious0.5$CTmax
-Treatment_Ramping <- Precious0.5$Treatment_Ramping
-Table = suppressWarnings(pairwise.wilcox.test(CTmax, Treatment_Ramping))
-Table2 = Table$p.value
-Table2
-Table3 = fullPTable(Table2)
-Table3
-multcompLetters(Table3)
